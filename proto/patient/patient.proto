@@ -1,0 +1,33 @@
+syntax = "proto3";
+package patient;
+option go_package = ".;";
+
+service PatientService {
+    rpc CreatePatient(CreatePatientRequest) returns (CreatePatientResponse) {}
+    rpc PatientLogin(PatientLoginRequest) returns (PatientLoginResponse) {}
+    // rpc DeletePatient(DeletePatientRequest) returns (DeletePatientResponse) {}
+}
+
+message CreatePatientRequest {
+    string name = 1;
+    string password = 2;
+    string id_card_number = 3;
+}
+
+message CreatePatientResponse {
+    int64 error_code = 1;
+    string token = 2;
+    string msg = 3;
+}
+
+message PatientLoginRequest {
+    string token = 1;
+    string id_card_number = 2;
+    string password = 3;
+}
+
+message PatientLoginResponse {
+    int64 error_code = 1;
+    string token = 2;
+    string msg = 3;
+}

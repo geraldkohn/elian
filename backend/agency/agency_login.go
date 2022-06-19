@@ -1,0 +1,47 @@
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"errors"
+	"time"
+
+	"github.com/geraldkohn/elian/config"
+	query "github.com/geraldkohn/elian/data/biz"
+	jwt "github.com/geraldkohn/elian/middleware/jwt"
+	pb "github.com/geraldkohn/elian/proto/agency"
+)
+
+func (s *server) AgencyLogin(ctx context.Context, in *pb.AgencyLoginRequest) (out *pb.AgencyLoginResponse, err error) {
+	uid, err := jwt.ParseToken(in.Token)
+
+	//token失效, 验证license
+	if err != nil {
+		licenses := []config.License{}
+		err = json.Unmarshal(config.LicenseData, &licenses)
+		if err != nil {
+			return &pb.AgencyLoginResponse{ErrorCode: 1, Token: "", Msg: "请重试"}, errors.New("后台解析json出错, error: " + err.Error())
+		}
+
+		for _, license := range licenses {
+			if in.License == license.LicenseCode {
+				agencyRepo := query.NewAgancyRepo()
+				a, err := agencyRepo.SelectByLicense(context.Background(), in.License)
+				if err != nil {
+					return &pb.AgencyLoginResponse{ErrorCode: 1, Token: "", Msg: "机构不存在"}, errors.New("未注册的机构试图登录, license: " + in.License)
+				}
+
+				newToken, _ := jwt.SignedToken(a.Uid)
+				agencyRepo.UpdateTokenAndLoginTime(context.Background(), a.Uid, newToken, jwt.FormatTime(time.Now()))
+				return &pb.AgencyLoginResponse{ErrorCode: 0, Token: newToken, Msg: "登录成功"}, nil
+			}
+		}
+
+		return &pb.AgencyLoginResponse{ErrorCode: 1, Token: "", Msg: "许可证不正确"}, errors.New("无许可证机构试图登录, license: " + in.License)
+	}
+
+	agencyRepo := query.NewAgancyRepo()
+	newToken, _ := jwt.SignedToken(uid)
+	agencyRepo.UpdateTokenAndLoginTime(context.Background(), uid, newToken, jwt.FormatTime(time.Now()))
+	return &pb.AgencyLoginResponse{ErrorCode: 0, Token: newToken, Msg: "登录成功"}, nil
+}

@@ -1,0 +1,167 @@
+syntax = "proto3";
+package record;
+option go_package = ".;";
+
+service RecordService {
+    rpc StaffCreateRecord(StaffCreateRecordRequest) returns (StaffCreateRecordResponse) {}
+
+    rpc PatientQueryRecords(PatientQueryRecordsRequest) returns (PatientQueryRecordsResponse) {} 
+    rpc StaffQueryRecords(StaffQueryRecordsRequest) returns (StaffQueryRecordsResponse) {}
+    rpc AgencyQueryRecords(AgencyQueryRecordsRequest) returns (AgencyQueryRecordsResponse) {}
+
+    rpc StaffSetReadAndWritePermission(StaffSetReadAndWritePermissionRequest) returns (StaffSetReadAndWritePermissionResponse) {}
+    rpc StaffSetReadOnlyPermission(StaffSetReadOnlyPermissionRequest) returns (StaffSetReadOnlyPermissionResponse) {}
+    rpc AgencySetReadAndWritePermission(AgencySetReadAndWritePermissionRequest) returns (AgencySetReadAndWritePermissionResponse) {}
+    rpc AgencySetReadOnlyPermission(AgencySetReadOnlyPermissionRequest) returns (AgencySetReadOnlyPermissionResponse) {}
+
+    rpc StaffUpdatePhotoHash(StaffUpdatePhotoHashRequest) returns (StaffUpdatePhotoHashResponse) {}
+    rpc StaffUpdateDocumentHash(StaffUpdateDocumentHashRequest) returns (StaffUpdateDocumentHashResponse) {}
+    rpc StaffUpdateDescription(StaffUpdateDescriptionRequest) returns (StaffUpdateDescriptionResponse) {}
+}
+
+//公共message开始
+
+message RecordRequest {
+    string patient_id_card_number = 1;  //用于确认患者身份
+    string photo_hash = 2;              //图片资源唯一识别码
+    string document_hash = 3;           //文档资源唯一识别码
+    string description = 4;             //病情简要描述
+}
+
+message RecordResponse {
+    string record_uid = 1;              //病历记录的唯一识别码
+    string patient_id_card_number = 2;  //用于确认患者身份
+    string patient_name = 3;            //患者的名字
+    string photo_hash = 4;              //图片资源唯一识别码
+    string document_hash = 5;           //文档资源唯一识别码
+    string last_change_time = 6;        //最后一次更改时间
+    string description = 7;             //病情的简要描述
+}
+
+// hospital, department, name 确定一个医生
+message PermissionRequest {
+    string hospital = 1;
+    string department = 2;
+    string name = 3;
+}
+
+message ErrorCodeAndInfo {
+    int64 error_code = 1;
+    string msg = 2;
+}
+
+//公共massage结束
+
+//创建病历记录和查询记录
+
+message StaffCreateRecordRequest {
+    string staff_token = 1;
+    RecordRequest record_request = 2;
+}
+
+message StaffCreateRecordResponse {
+    ErrorCodeAndInfo error_code_and_info = 1;
+}
+
+message PatientQueryRecordsRequest {
+    string patient_token = 1;
+}
+
+message PatientQueryRecordsResponse {
+    repeated RecordResponse record_responses = 1;
+    ErrorCodeAndInfo error_code_and_info = 2;
+}
+
+message StaffQueryRecordsRequest {
+    string staff_token = 1;
+    string patient_id_card_number = 2;  //用于确定患者
+}
+
+message StaffQueryRecordsResponse {
+    repeated RecordResponse record_responses = 1;
+    ErrorCodeAndInfo error_code_and_info = 2;
+}
+
+message AgencyQueryRecordsRequest {
+    string agency_token = 1;
+    string patient_id_card_number = 2;  //用于确定患者
+}
+
+message AgencyQueryRecordsResponse {
+    repeated RecordResponse record_responses = 1;
+    ErrorCodeAndInfo error_code_and_info = 2;
+}
+
+//设置权限
+
+message StaffSetReadAndWritePermissionRequest {
+    string staff_token = 1;
+    string record_uid = 2;
+    repeated PermissionRequest permission_requests = 3;
+}
+
+message StaffSetReadAndWritePermissionResponse {
+    ErrorCodeAndInfo error_code_and_info = 1;
+}
+
+message StaffSetReadOnlyPermissionRequest {
+    string staff_token = 1;
+    string record_uid = 2;
+    repeated PermissionRequest permission_requests = 3;
+}
+
+message StaffSetReadOnlyPermissionResponse {
+    ErrorCodeAndInfo error_code_and_info = 1;
+}
+
+message AgencySetReadAndWritePermissionRequest {
+    string agency_token = 1;
+    string record_uid = 2;
+    repeated PermissionRequest permission_requests = 3;
+}
+
+message AgencySetReadAndWritePermissionResponse {
+    ErrorCodeAndInfo error_code_and_info = 1;
+}
+
+message AgencySetReadOnlyPermissionRequest {
+    string agency_token = 1;
+    string record_uid = 2;
+    repeated PermissionRequest permission_requests = 3;
+}
+
+message AgencySetReadOnlyPermissionResponse {
+    ErrorCodeAndInfo error_code_and_info = 1;
+}
+
+// 更新病历记录
+
+message StaffUpdatePhotoHashRequest {
+    string staff_token = 1;
+    string photo_hash = 2;
+    string record_uid = 3;
+}
+
+message StaffUpdatePhotoHashResponse {
+    ErrorCodeAndInfo error_code_and_info = 1;
+}
+
+message StaffUpdateDocumentHashRequest {
+    string staff_token = 1;
+    string document_hash = 2;
+    string record_uid = 3;
+}
+
+message StaffUpdateDocumentHashResponse {
+    ErrorCodeAndInfo error_code_and_info = 1;
+}
+
+message StaffUpdateDescriptionRequest {
+    string staff_token = 1;
+    string description = 2;
+    string record_uid = 3;
+}
+
+message StaffUpdateDescriptionResponse {
+    ErrorCodeAndInfo error_code_and_info = 1;
+}
