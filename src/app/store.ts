@@ -1,5 +1,6 @@
 // 引入configureStore创建全局store
 import { configureStore} from '@reduxjs/toolkit';
+import { ThunkAction, Action } from '@reduxjs/toolkit';
 // 从自定一的Slice引入自定义的Reducer
 import counterReducer from '../features/counter/counterSlice';
 export const store = configureStore({
@@ -16,7 +17,7 @@ export type RootState = ReturnType<typeof store.getState>;
 
 // 引入Action和异步Action
 // 定义Thunk类型
-import { ThunkAction, Action } from '@reduxjs/toolkit';
+
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,

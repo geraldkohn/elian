@@ -1,3 +1,6 @@
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { fetchCount } from './counterAPI';
+import { RootState, AppThunk } from '../../app/store';
 
 // 导出接口  值为number类型  状态为 idle loading failed三个字符串
 export interface CounterState {
@@ -12,11 +15,9 @@ const initialState: CounterState = {
 };
 
 
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-
 
 // 导入我们自定义的异步方法
-import { fetchCount } from './counterAPI';
+
 // 定义了一个异步执行的逻辑  可以像一个普通的action一样被dispatch  这会变为第一个参数
 // 异步代码可以之后被执行 其他的action也可以被dispatch
 export const incrementAsync = createAsyncThunk(
@@ -69,7 +70,7 @@ export const { increment, decrement, incrementByAmount } = counterSlice.actions;
 
 
 // 导入自定义的redux类型用于ts规范
-import { RootState, AppThunk } from '../../app/store';
+
 
 // selector 允许我们从状态中取值  Selector也可以在使用的时候inline定义 而不是在slice文件中  例如`useSelector((state: RootState) => state.counter.value)`
 export const selectCount = (state: RootState) => state.counter.value;
