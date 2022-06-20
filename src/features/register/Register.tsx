@@ -1,19 +1,19 @@
-import { Button,Form, Input, Card ,message } from "antd";
+import { Button, Form, Input, Card, message } from "antd";
 import React from "react";
-
-import { LoginBox } from "./Login.module";
 import { patientLogin } from "../../api/user";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { RegisterBox } from "./Register.module";
 
-export const Login: React.FC = () => {
-  const navigate=useNavigate()
+export const Register: React.FC = () => {
+  const navigate = useNavigate();
   const onFinish = (data: any) => {
-    patientLogin(data).then(res=>{
-      navigate('/')
-    }).catch(res=>{
-      message.error("后端返回的错误信息")
-    })
+    patientLogin(data)
+      .then((res) => {
+        navigate("/");
+      })
+      .catch((res) => {
+        message.error("后端返回的错误信息");
+      });
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -21,11 +21,11 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <LoginBox>
+    <RegisterBox>
       <Card
-        title="基于区块链的医疗数据共享平台"
-        style={{backgroundColor: "#fcfcfc"}}
-        hoverable= {true}
+        title="注册"
+        style={{ backgroundColor: "#fcfcfc" }}
+        hoverable={true}
       >
         <br />
         <Form
@@ -53,18 +53,13 @@ export const Login: React.FC = () => {
             <Input.Password />
           </Form.Item>
 
-          <Link to={'/register'}>没有账号? 立即注册</Link>
-          
-          <br />
-          <br />
-
           <Form.Item wrapperCol={{ offset: 4, span: 16 }}>
             <Button type="primary" htmlType="submit">
-              登录
+              注册
             </Button>
           </Form.Item>
         </Form>
       </Card>
-    </LoginBox>
+    </RegisterBox>
   );
 };

@@ -1,18 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState, AppThunk } from "../../app/store";
 
-export interface HomeState {
+export interface RegisterState {
   value: number;
   status: "idle" | "loading" | "failed";
 }
 
-const initialState: HomeState = {
+const initialState: RegisterState = {
   value: 0,
   status: "idle",
 };
 
-export const homeSlice = createSlice({
-  name: "home",
+export const registerSlice = createSlice({
+  name: "register",
   initialState,
   reducers: {
     increment: (state) => {
@@ -27,10 +27,10 @@ export const homeSlice = createSlice({
   },
 });
 
-export const { increment, decrement, incrementByAmount } = homeSlice.actions;
+export const { increment, decrement, incrementByAmount } =
+  registerSlice.actions;
 
-export const selectCount = (state: RootState) => state.home.value;
-
+export const selectCount = (state: RootState) => state.register.value;
 export const incrementIfOdd =
   (amount: number): AppThunk =>
   (dispatch, getState) => {
@@ -40,4 +40,4 @@ export const incrementIfOdd =
     }
   };
 
-export default homeSlice.reducer;
+export default registerSlice.reducer;

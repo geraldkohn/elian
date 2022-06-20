@@ -2,22 +2,21 @@
 import { configureStore} from '@reduxjs/toolkit';
 import { ThunkAction, Action } from '@reduxjs/toolkit';
 // 从自定一的Slice引入自定义的Reducer
-import counterReducer from '../features/counter/counterSlice';
+import loginReducer from '../features/login/loginSlice';
+import registerReducer from '../features/register/registerSlice'
+import homeReducer from '../features/home/homeSlice';
+
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    login: loginReducer,
+    register: registerReducer,
+    home: homeReducer
   },
 });
 
 
-// 定义dispatch和state类型
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
-
-
-// 引入Action和异步Action
-// 定义Thunk类型
-
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
