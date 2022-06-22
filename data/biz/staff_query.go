@@ -29,7 +29,15 @@ type staffManager struct {
 }
 
 func NewStaffRepo() staffRepo {
-	return &staffManager{DB: config.DB}
+	db, _ := config.GenerateDB(config.Dsn)
+	//建表
+	if !db.Migrator().HasTable("staff") {
+		err := db.Migrator().CreateTable(&model.Staff{})
+		if err != nil {
+			panic("创建staff表错误")
+		}
+	}
+	return &staffManager{DB: db}
 }
 
 func (r *staffManager) Create(ctx context.Context, staff *model.Staff) (err error) {

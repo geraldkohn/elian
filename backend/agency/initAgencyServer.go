@@ -1,4 +1,4 @@
-package main
+package agency
 
 import (
 	"log"
@@ -13,7 +13,7 @@ type server struct {
 	pb.UnimplementedAgencyServiceServer
 }
 
-func main() {
+func InitAgencyServer() {
 	var err error
 
 	lis, err := net.Listen("tcp", config.Host+":"+config.AgencyPort)

@@ -1,4 +1,4 @@
-package main
+package agency
 
 import (
 	"context"
@@ -24,7 +24,7 @@ func (s *server) CreateAgency(ctx context.Context, in *pb.CreateAgencyRequest) (
 
 	for _, license := range licenses {
 		if in.License == license.LicenseCode {
-			agencyRepo := query.NewAgancyRepo()
+			agencyRepo := query.NewAgencyRepo()
 			uid := uid.NewUid()
 			token, err := jwt.SignedToken(uid)
 			if err != nil {

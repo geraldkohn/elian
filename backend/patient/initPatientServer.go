@@ -1,4 +1,4 @@
-package main
+package patient
 
 import (
 	"log"
@@ -13,7 +13,7 @@ type server struct {
 	pb.UnimplementedPatientServiceServer
 }
 
-func main() {
+func InitPatientServer() {
 	var err error
 
 	lis, err := net.Listen("tcp", config.Host+":"+config.PatientPort)

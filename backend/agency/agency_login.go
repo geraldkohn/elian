@@ -1,4 +1,4 @@
-package main
+package agency
 
 import (
 	"context"
@@ -25,7 +25,7 @@ func (s *server) AgencyLogin(ctx context.Context, in *pb.AgencyLoginRequest) (ou
 
 		for _, license := range licenses {
 			if in.License == license.LicenseCode {
-				agencyRepo := query.NewAgancyRepo()
+				agencyRepo := query.NewAgencyRepo()
 				a, err := agencyRepo.SelectByLicense(context.Background(), in.License)
 				if err != nil {
 					return &pb.AgencyLoginResponse{ErrorCode: 1, Token: "", Msg: "机构不存在"}, errors.New("未注册的机构试图登录, license: " + in.License)
@@ -40,7 +40,7 @@ func (s *server) AgencyLogin(ctx context.Context, in *pb.AgencyLoginRequest) (ou
 		return &pb.AgencyLoginResponse{ErrorCode: 1, Token: "", Msg: "许可证不正确"}, errors.New("无许可证机构试图登录, license: " + in.License)
 	}
 
-	agencyRepo := query.NewAgancyRepo()
+	agencyRepo := query.NewAgencyRepo()
 	newToken, _ := jwt.SignedToken(uid)
 	agencyRepo.UpdateTokenAndLoginTime(context.Background(), uid, newToken, jwt.FormatTime(time.Now()))
 	return &pb.AgencyLoginResponse{ErrorCode: 0, Token: newToken, Msg: "登录成功"}, nil

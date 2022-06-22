@@ -1,8 +1,9 @@
-package main
+package api
 
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"net/http"
 	"time"
 
@@ -43,14 +44,15 @@ func patientRegisterHandler(w http.ResponseWriter, r *http.Request) {
 		createPatientRes, err := c.CreatePatient(ctx, createPatientReq)
 
 		if err != nil {
-			res.Msg = createPatientRes.Msg
-			res.Token = createPatientRes.Token
+			res.Msg = createPatientRes.GetMsg()
+			res.Token = createPatientRes.GetToken()
 			res.Status = 406
+			log.Println(err)
 			return
 		}
 
-		res.Msg = createPatientRes.Msg
-		res.Token = createPatientRes.Token
+		res.Msg = createPatientRes.GetMsg()
+		res.Token = createPatientRes.GetToken()
 		res.Status = 200
 		return
 	}

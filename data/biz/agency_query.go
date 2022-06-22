@@ -19,8 +19,15 @@ type agencyManager struct {
 	DB *gorm.DB
 }
 
-func NewAgancyRepo() agencyRepo {
-	return &agencyManager{DB: config.DB}
+func NewAgencyRepo() agencyRepo {
+	db, _ := config.GenerateDB(config.Dsn)
+	if !db.Migrator().HasTable("agency") {
+		err := db.Migrator().CreateTable(&model.Agency{})
+		if err != nil {
+			panic("创建agency表错误")
+		}
+	}
+	return &agencyManager{DB: db}
 }
 
 func (r *agencyManager) Create(ctx context.Context, agency *model.Agency) (err error) {

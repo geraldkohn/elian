@@ -1,4 +1,4 @@
-package main
+package staff
 
 import (
 	"log"
@@ -13,7 +13,7 @@ type server struct {
 	pb.UnimplementedStaffServiceServer
 }
 
-func main() {
+func InitStaffServer() {
 	var err error
 
 	lis, err := net.Listen("tcp", config.Host + ":" + config.StaffPort)

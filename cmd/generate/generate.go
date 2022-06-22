@@ -10,8 +10,9 @@ func main() {
 	g := gen.NewGenerator(gen.Config{
 		OutPath: "data/query",
 	})
-
-	g.UseDB(config.DB)
+	
+	db, _ := config.GenerateDB(config.Dsn)
+	g.UseDB(db)
 
 	g.ApplyBasic(model.Agency{}, model.Patient{}, model.Staff{}, model.Record{}, model.PatientuidToRecorduid{})
 

@@ -22,7 +22,14 @@ type patientManager struct {
 }
 
 func NewPatientRepo() patientRepo {
-	return &patientManager{DB: config.DB}
+	db, _ := config.GenerateDB(config.Dsn)
+	if !db.Migrator().HasTable("patient") {
+		err := db.Migrator().CreateTable(&model.Patient{})
+		if err != nil {
+			panic("创建patient表错误")
+		}
+	}
+	return &patientManager{DB: db}
 }
 
 func (r *patientManager) Create(ctx context.Context, pateint *model.Patient) (err error) {

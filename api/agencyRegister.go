@@ -1,8 +1,9 @@
-package main
+package api
 
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"net/http"
 	"time"
 
@@ -27,6 +28,7 @@ func agencyRegisterHandler(w http.ResponseWriter, r *http.Request) {
 			res.Status = 400
 			res.Token = ""
 			res.Msg = "参数错误"
+			log.Println(err.Error())
 			return
 		}
 

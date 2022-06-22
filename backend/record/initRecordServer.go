@@ -1,4 +1,4 @@
-package main
+package record
 
 import (
 	"log"
@@ -13,7 +13,7 @@ type server struct {
 	pb.UnimplementedRecordServiceServer
 }
 
-func main() {
+func InitRecordServer() {
 	lis, err := net.Listen("tcp", config.Host+":"+config.RecordPort)
 	if err != nil {
 		log.Fatalf("record component failed to serve: %v", err)

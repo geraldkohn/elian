@@ -19,12 +19,19 @@ type uidmapManager struct {
 }
 
 func NewUidmapRepo() uidmapRepo {
-	return &uidmapManager{DB: config.DB}
+	db, _ := config.GenerateDB(config.Dsn)
+	if !db.Migrator().HasTable("patientuid_to_recorduid") {
+		err := db.Migrator().CreateTable(&model.PatientuidToRecorduid{})
+		if err != nil {
+			panic("创建patientuid_to_recorduid表错误")
+		}
+	}
+	return &uidmapManager{DB: db}
 }
 
 func (r *uidmapManager) Create(ctx context.Context, uidmap *model.PatientuidToRecorduid) (err error) {
 	err = query.Use(r.DB).PatientuidToRecorduid.WithContext(ctx).Create(uidmap)
-	return 
+	return
 }
 
 func (r *uidmapManager) SelectAllByPatientUid(ctx context.Context, patientUid string) (patientuidToRecorduid []*model.PatientuidToRecorduid, err error) {

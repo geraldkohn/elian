@@ -1,4 +1,4 @@
-package main
+package patient
 
 import (
 	"context"
@@ -15,10 +15,10 @@ import (
 
 func (s *server) CreatePatient(ctx context.Context, in *pb.CreatePatientRequest) (*pb.CreatePatientResponse, error) {
 	if !check.VerifyIdCardNumberAndNameFormat(in.IdCardNumber, in.Name) {
-		return &pb.CreatePatientResponse{ErrorCode: 1, Token: "", Msg: "身份证与名称不匹配"}, errors.New("创建患者账号时, 身份者格式和名称不正确或者不匹配. " + "IdCardNumber: " + in.IdCardNumber + " name: " + in.Name)
+		return &pb.CreatePatientResponse{ErrorCode: 1, Token: "", Msg: "身份证与名称不匹配"}, errors.New("创建患者账号时, 身份者格式和名称不正确或者不匹配. " + "IdCardNumber: " + in.GetIdCardNumber() + " name: " + in.GetName())
 	}
 	if !check.VerifyPasswordFormat(in.Password) {
-		return &pb.CreatePatientResponse{ErrorCode: 1, Token: "", Msg: "密码格式不正确"}, errors.New("创建患者账号时, 密码格式不正确." + "IdCardNumber: " + in.IdCardNumber + " name: " + in.Name + " password: " + in.Password)
+		return &pb.CreatePatientResponse{ErrorCode: 1, Token: "", Msg: "密码格式不正确"}, errors.New("创建患者账号时, 密码格式不正确." + "IdCardNumber: " + in.GetIdCardNumber() + " name: " + in.GetName() + " password: " + in.GetPassword())
 	}
 
 	now := time.Now()
@@ -41,7 +41,7 @@ func (s *server) CreatePatient(ctx context.Context, in *pb.CreatePatientRequest)
 	patientRepo := query.NewPatientRepo()
 	err = patientRepo.Create(context.Background(), p)
 	if err != nil {
-		return &pb.CreatePatientResponse{ErrorCode: 1, Token: "", Msg: "注册失败, 未知错误"}, err
+		return &pb.CreatePatientResponse{ErrorCode: 1, Token: "", Msg: "注册失败, 未知错误"}, errors.New("操作数据库错误: " + err.Error())
 	}
 
 	return &pb.CreatePatientResponse{ErrorCode: 0, Token: token, Msg: "注册成功"}, nil

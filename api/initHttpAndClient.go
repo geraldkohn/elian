@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"log"
@@ -6,6 +6,7 @@ import (
 
 	config "github.com/geraldkohn/elian/config"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 var (
@@ -15,24 +16,28 @@ var (
 	connRecord  *grpc.ClientConn
 )
 
-func main() {
+func InitHttpAndClient() {
 	var err error
-	connPatient, err = grpc.Dial(config.Host + ":" + config.PatientPort)
+	connPatient, err = grpc.Dial(config.Host + ":" + config.PatientPort, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("患者模块客户端初始化失败: %v", err)
 	}
-	connAgency, err = grpc.Dial(config.Host + ":" + config.AgencyPort)
+	log.Println("start patient rpc client")
+	connAgency, err = grpc.Dial(config.Host + ":" + config.AgencyPort, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("机构模块客户端初始化失败: %v", err)
 	}
-	connStaff, err = grpc.Dial(config.Host + ":" + config.StaffPort)
+	log.Println("start agency rpc client")
+	connStaff, err = grpc.Dial(config.Host + ":" + config.StaffPort, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("医生模块客户端初始化失败: %v", err)
 	}
-	connRecord, err = grpc.Dial(config.Host + ":" + config.RecordPort)
+	log.Println("start staff rpc client")
+	connRecord, err = grpc.Dial(config.Host + ":" + config.RecordPort, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("病历记录模块客户端初始化失败: %v", err)
 	}
+	log.Println("start record rpc client")
 	defer func() {
 		connPatient.Close()
 		connAgency.Close()
@@ -40,7 +45,7 @@ func main() {
 		connRecord.Close()
 	}()
 
-	log.Println("http server begin")
+	log.Println("start http server")
 
 	http.HandleFunc("/api/patient/register", patientRegisterHandler)
 	http.HandleFunc("/api/staff/register", staffRegisterHandler)
