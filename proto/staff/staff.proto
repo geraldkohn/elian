@@ -1,6 +1,6 @@
 syntax = "proto3";
 package staff;
-option go_package = ".;";
+option go_package = "./staff";
 
 service StaffService {
     rpc CreateStaff(CreateStaffRequset) returns (CreateStaffResponse) {}

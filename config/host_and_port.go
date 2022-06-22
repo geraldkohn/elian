@@ -1,9 +1,9 @@
 package config
 
 var (
-	Host        string = " "
-	PatientPort string = " "
-	StaffPort   string = " "
-	AgencyPort  string = " "
-	RecordPort  string = " "
+	Host        string = "127.0.0.1"
+	PatientPort string = "8081"
+	StaffPort   string = "8082"
+	AgencyPort  string = "8083"
+	RecordPort  string = "8084"
 )

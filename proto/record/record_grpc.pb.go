@@ -4,7 +4,7 @@
 // - protoc             v3.14.0
 // source: proto/record/record.proto
 
-package __
+package record
 
 import (
 	context "context"

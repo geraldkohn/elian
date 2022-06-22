@@ -1,6 +1,6 @@
 syntax = "proto3";
 package patient;
-option go_package = ".;";
+option go_package = "./patient";
 
 service PatientService {
     rpc CreatePatient(CreatePatientRequest) returns (CreatePatientResponse) {}

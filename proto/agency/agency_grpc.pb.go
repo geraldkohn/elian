@@ -4,7 +4,7 @@
 // - protoc             v3.14.0
 // source: proto/agency/agency.proto
 
-package __
+package agency
 
 import (
 	context "context"

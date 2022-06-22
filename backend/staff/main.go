@@ -10,6 +10,7 @@ import (
 )
 
 type server struct {
+	pb.UnimplementedStaffServiceServer
 }
 
 func main() {

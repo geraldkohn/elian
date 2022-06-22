@@ -1,6 +1,6 @@
 syntax = "proto3";
 package agency;
-option go_package = ".;";
+option go_package = "./agency";
 
 service AgencyService {
     rpc CreateAgency(CreateAgencyRequest) returns (CreateAgencyResponse) {}

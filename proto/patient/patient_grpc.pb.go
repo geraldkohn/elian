@@ -4,7 +4,7 @@
 // - protoc             v3.14.0
 // source: proto/patient/patient.proto
 
-package __
+package patient
 
 import (
 	context "context"

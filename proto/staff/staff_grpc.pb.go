@@ -4,7 +4,7 @@
 // - protoc             v3.14.0
 // source: proto/staff/staff.proto
 
-package __
+package staff
 
 import (
 	context "context"
