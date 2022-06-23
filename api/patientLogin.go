@@ -35,20 +35,22 @@ func patientLoginHandler(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
-		patientLoginReq := &pb.PatientLoginRequest{
+		rpcReq := &pb.PatientLoginRequest{
 			Token:        token,
 			IdCardNumber: req.IdCardNumber,
 			Password:     req.Password,
 		}
 
-		patientLoginRes, err := c.PatientLogin(ctx, patientLoginReq)
+		rpcRes, err := c.PatientLogin(ctx, rpcReq)
 		if err != nil {
-			res.Msg = patientLoginRes.Msg
+			res.Msg = rpcRes.GetMsg()
 			res.Token = ""
 			res.Status = 406
+			return 
 		}
-		res.Msg = patientLoginRes.Msg
-		res.Token = patientLoginRes.Token
+		res.Msg = rpcRes.GetMsg()
+		res.Token = rpcRes.GetToken()
 		res.Status = 200
+		return 
 	}
 }

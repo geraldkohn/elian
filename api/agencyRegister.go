@@ -36,21 +36,21 @@ func agencyRegisterHandler(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
-		createAgencyReq := &pb.CreateAgencyRequest{
+		rpcReq := &pb.CreateAgencyRequest{
 			License: req.License,
 		}
 
-		createStaffRes, err := c.CreateAgency(ctx, createAgencyReq)
+		rpcRes, err := c.CreateAgency(ctx, rpcReq)
 
 		if err != nil {
-			res.Msg = createStaffRes.Msg
-			res.Token = createStaffRes.Token
+			res.Msg = rpcRes.GetMsg()
+			res.Token = rpcRes.GetToken()
 			res.Status = 406
 			return
 		}
 
-		res.Msg = createStaffRes.Msg
-		res.Token = createStaffRes.Token
+		res.Msg = rpcRes.GetMsg()
+		res.Token = rpcRes.GetToken()
 		res.Status = 200
 		return
 	}

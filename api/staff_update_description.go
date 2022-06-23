@@ -36,10 +36,10 @@ func staffUpdateDescriptionHandler(w http.ResponseWriter, r *http.Request) {
 		rpcRes, err := c.StaffUpdateDescription(ctx, rpcReq)
 		if err != nil {
 			res.StatusAndMsgRes.Status = 406
-			res.StatusAndMsgRes.Msg = rpcRes.ErrorCodeAndInfo.Msg
+			res.StatusAndMsgRes.Msg = rpcRes.GetErrorCodeAndInfo().GetMsg()
 			return
 		}
-		res.StatusAndMsgRes.Msg = rpcRes.ErrorCodeAndInfo.Msg
+		res.StatusAndMsgRes.Msg = rpcRes.GetErrorCodeAndInfo().GetMsg()
 		res.StatusAndMsgRes.Status = 200
 		return
 	}

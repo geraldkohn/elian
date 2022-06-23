@@ -34,23 +34,23 @@ func staffRegisterHandler(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
-		createStaffReq := &pb.CreateStaffRequset{
+		rpcReq := &pb.CreateStaffRequset{
 			Name:         req.Name,
 			Password:     req.Password,
 			IdCardNumber: req.IdCardNumber,
 		}
 
-		createStaffRes, err := c.CreateStaff(ctx, createStaffReq)
+		rpcRes, err := c.CreateStaff(ctx, rpcReq)
 
 		if err != nil {
-			res.Msg = createStaffRes.Msg
-			res.Token = createStaffRes.Token
+			res.Msg = rpcRes.GetMsg()
+			res.Token = rpcRes.GetToken()
 			res.Status = 406
 			return
 		}
 
-		res.Msg = createStaffRes.Msg
-		res.Token = createStaffRes.Token
+		res.Msg = rpcRes.Msg
+		res.Token = rpcRes.Token
 		res.Status = 200
 		return
 	}

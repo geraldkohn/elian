@@ -42,10 +42,10 @@ func staffQueryOrCreateRecordHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		rpcRes, err := c.StaffCreateRecord(ctx, rpcReq)
 		if err != nil {
-			res.StatusAndMsgRes.Msg = rpcRes.ErrorCodeAndInfo.Msg
+			res.StatusAndMsgRes.Msg = rpcRes.GetErrorCodeAndInfo().GetMsg()
 			res.StatusAndMsgRes.Status = 406
 		}
-		res.StatusAndMsgRes.Msg = rpcRes.ErrorCodeAndInfo.Msg
+		res.StatusAndMsgRes.Msg = rpcRes.GetErrorCodeAndInfo().GetMsg()
 		res.StatusAndMsgRes.Status = 200
 		return
 	}
@@ -76,15 +76,15 @@ func staffQueryOrCreateRecordHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		rpcRes, err := c.StaffQueryRecords(ctx, rpcReq)
 		if err != nil {
-			res.StatusAndMsgRes.Msg = rpcRes.ErrorCodeAndInfo.Msg
+			res.StatusAndMsgRes.Msg = rpcRes.GetErrorCodeAndInfo().GetMsg()
 			res.StatusAndMsgRes.Status = 406
 			res.RecordResArray = nil
 			return
 		}
 
-		res.StatusAndMsgRes.Msg = rpcRes.ErrorCodeAndInfo.Msg
+		res.StatusAndMsgRes.Msg = rpcRes.GetErrorCodeAndInfo().GetMsg()
 		res.StatusAndMsgRes.Status = 200
-		for _, rpcRecord := range rpcRes.RecordResponses {
+		for _, rpcRecord := range rpcRes.GetRecordResponses() {
 			httpRecord := recordRes{
 				PatientIdCardNumber: rpcRecord.PatientIdCardNumber,
 				PhotoHash:           rpcRecord.PhotoHash,

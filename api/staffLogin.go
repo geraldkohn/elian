@@ -35,20 +35,22 @@ func staffLoginHandler(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
-		staffLoginReq := &pb.StaffLoginRequest{
+		rpcReq := &pb.StaffLoginRequest{
 			Token:        token,
 			IdCardNumber: req.IdCardNumber,
 			Password:     req.Password,
 		}
 
-		staffLoginRes, err := c.StaffLogin(ctx, staffLoginReq)
+		rpcRes, err := c.StaffLogin(ctx, rpcReq)
 		if err != nil {
-			res.Msg = staffLoginRes.Msg
+			res.Msg = rpcRes.GetMsg()
 			res.Token = ""
 			res.Status = 406
+			return 
 		}
-		res.Msg = staffLoginRes.Msg
-		res.Token = staffLoginRes.Token
+		res.Msg = rpcRes.GetMsg()
+		res.Token = rpcRes.GetToken()
 		res.Status = 200
+		return 
 	}
 }

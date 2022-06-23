@@ -35,24 +35,24 @@ func patientRegisterHandler(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
-		createPatientReq := &pb.CreatePatientRequest{
+		rpcReq := &pb.CreatePatientRequest{
 			Name:         req.Name,
 			Password:     req.Password,
 			IdCardNumber: req.IdCardNumber,
 		}
 
-		createPatientRes, err := c.CreatePatient(ctx, createPatientReq)
+		rpcRes, err := c.CreatePatient(ctx, rpcReq)
 
 		if err != nil {
-			res.Msg = createPatientRes.GetMsg()
-			res.Token = createPatientRes.GetToken()
+			res.Msg = rpcRes.GetMsg()
+			res.Token = rpcRes.GetToken()
 			res.Status = 406
 			log.Println(err)
 			return
 		}
 
-		res.Msg = createPatientRes.GetMsg()
-		res.Token = createPatientRes.GetToken()
+		res.Msg = rpcRes.GetMsg()
+		res.Token = rpcRes.GetToken()
 		res.Status = 200
 		return
 	}

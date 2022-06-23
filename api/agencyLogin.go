@@ -35,19 +35,21 @@ func agencyLoginHandler(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
-		agencyLoginReq := &pb.AgencyLoginRequest{
+		rpcReq := &pb.AgencyLoginRequest{
 			License: req.License,
 			Token:   token,
 		}
 
-		agencyLoginRes, err := c.AgencyLogin(ctx, agencyLoginReq)
+		rpcRes, err := c.AgencyLogin(ctx, rpcReq)
 		if err != nil {
-			res.Msg = agencyLoginRes.Msg
+			res.Msg = rpcRes.GetMsg()
 			res.Token = ""
 			res.Status = 406
+			return 
 		}
-		res.Msg = agencyLoginRes.Msg
-		res.Token = agencyLoginRes.Token
+		res.Msg = rpcRes.GetMsg()
+		res.Token = rpcRes.GetToken()
 		res.Status = 200
+		return 
 	}
 }

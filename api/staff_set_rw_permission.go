@@ -43,12 +43,12 @@ func staffSetRWPermissionHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		rpcRes, err := c.StaffSetReadAndWritePermission(ctx, rpcReq)
 		if err != nil {
-			res.StatusAndMsgRes.Msg = rpcRes.ErrorCodeAndInfo.Msg
+			res.StatusAndMsgRes.Msg = rpcRes.GetErrorCodeAndInfo().GetMsg()
 			res.StatusAndMsgRes.Status = 406
 			return
 		}
 
-		res.StatusAndMsgRes.Msg = rpcRes.ErrorCodeAndInfo.Msg
+		res.StatusAndMsgRes.Msg = rpcRes.GetErrorCodeAndInfo().GetMsg()
 		res.StatusAndMsgRes.Status = 200
 		return
 	}
