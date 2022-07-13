@@ -18,22 +18,22 @@ var (
 
 func InitHttpAndClient() {
 	var err error
-	connPatient, err = grpc.Dial(config.Host + ":" + config.PatientPort, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	connPatient, err = grpc.Dial(config.Host+":"+config.PatientPort, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("患者模块客户端初始化失败: %v", err)
 	}
 	log.Println("start patient rpc client")
-	connAgency, err = grpc.Dial(config.Host + ":" + config.AgencyPort, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	connAgency, err = grpc.Dial(config.Host+":"+config.AgencyPort, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("机构模块客户端初始化失败: %v", err)
 	}
 	log.Println("start agency rpc client")
-	connStaff, err = grpc.Dial(config.Host + ":" + config.StaffPort, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	connStaff, err = grpc.Dial(config.Host+":"+config.StaffPort, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("医生模块客户端初始化失败: %v", err)
 	}
 	log.Println("start staff rpc client")
-	connRecord, err = grpc.Dial(config.Host + ":" + config.RecordPort, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	connRecord, err = grpc.Dial(config.Host+":"+config.RecordPort, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("病历记录模块客户端初始化失败: %v", err)
 	}
@@ -64,7 +64,8 @@ func InitHttpAndClient() {
 	http.HandleFunc("/api/record/agency-set-rw-permission", agencySetRWPermissionHandler)
 	http.HandleFunc("/api/record/agency-set-r-permission", agencySetRPermissionHandler)
 
-	err = http.ListenAndServe(":12345", nil)
+	// err = http.ListenAndServe(":12345", nil)
+	err = http.ListenAndServe(":"+config.HttpPort, nil)
 	if err != nil {
 		panic("http serve error")
 	}
