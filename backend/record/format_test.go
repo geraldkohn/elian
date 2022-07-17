@@ -1,37 +1,39 @@
-package record_test
+package record
 
-/**
 import (
-	"fmt"
+	"log"
 	"testing"
-
-	record "github.com/geraldkohn/elian/backend/record"
 )
 
 func TestMarshal(t *testing.T) {
-	str, err := record.Marshal("", "adfasdfasdfdsaf")
+	str, err := marshal("", "adfasdfasdfdsaf")
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
-	uids, err := record.Unmarshal(str)
+	uids, err := unmarshal(str)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 	for _, s := range uids {
-		fmt.Println(s)
+		log.Println(s)
 	}
 
-	nextStr, err := record.Marshal(str, "test2")
+	nextStr1, err := marshal(str, "test2")
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
-	nextUids, err := record.Unmarshal(nextStr)
+	nextStr2, err := marshal(nextStr1, "test3")
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
-	for _, s :=  range nextUids {
-		fmt.Println(s)
+	nextUids, err := unmarshal(nextStr2)
+	if err != nil {
+		log.Println(err)
 	}
-
+	log.Println("----------------")
+	log.Println(nextStr2)
+	log.Println("begin:------------------")
+	for _, s := range nextUids {
+		log.Println(s)
+	}
 }
-*/
