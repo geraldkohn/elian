@@ -63,8 +63,13 @@ func (s *server) StaffQueryRecords(ctx context.Context, in *pb.StaffQueryRecords
 	for _, uidmap := range uidmaps {
 		recordModel, err := recordRepo.FindByUid(context.Background(), uidmap.RecordUid)
 		// TODO 判断医生是否有权限读取
-		if err != nil || !judgeStaffROnlyPermission(staffUid, recordModel.Uid) {
+		if err != nil {
+			log.Println("医生uid: " + staffUid + " 查找患者记录. error: " + err.Error())
 			continue
+		}
+		if !judgeStaffROnlyPermission(staffUid, recordModel.Uid) {
+			log.Println("医生uid: " + staffUid + " 查找患者记录, 无权限读取.")
+			break
 		}
 		record := &pb.RecordResponse{
 			RecordUid:           recordModel.Uid,

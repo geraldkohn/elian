@@ -68,7 +68,7 @@ func staffQueryOrCreateRecordHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		c := pb.NewRecordServiceClient(connStaff)
+		c := pb.NewRecordServiceClient(connRecord)
 		ctx := context.Background()
 		rpcReq := &pb.StaffQueryRecordsRequest{
 			StaffToken:          token,
@@ -86,12 +86,12 @@ func staffQueryOrCreateRecordHandler(w http.ResponseWriter, r *http.Request) {
 		res.StatusAndMsgRes.Status = 200
 		for _, rpcRecord := range rpcRes.GetRecordResponses() {
 			httpRecord := recordRes{
-				PatientIdCardNumber: rpcRecord.PatientIdCardNumber,
-				PhotoHash:           rpcRecord.PhotoHash,
-				DocumentHash:        rpcRecord.DocumentHash,
-				LastChangeTime:      rpcRecord.LastChangeTime,
-				Description:         rpcRecord.Description,
-				RecordUid:           rpcRecord.RecordUid,
+				PatientIdCardNumber: rpcRecord.GetPatientIdCardNumber(),
+				PhotoHash:           rpcRecord.GetPhotoHash(),
+				DocumentHash:        rpcRecord.GetDocumentHash(),
+				LastChangeTime:      rpcRecord.GetLastChangeTime(),
+				Description:         rpcRecord.GetDescription(),
+				RecordUid:           rpcRecord.GetRecordUid(),
 			}
 			res.RecordResArray = append(res.RecordResArray, httpRecord)
 		}

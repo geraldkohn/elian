@@ -31,7 +31,15 @@ func (s *server) StaffCreateRecord(ctx context.Context, in *pb.StaffCreateRecord
 
 	// TODO 根据患者身份证号查询患者uid, 格式化可读可写的医生的uid
 	patientRepo := query.NewPatientRepo()
-	patient, _ := patientRepo.SelectByIdCardNumber(context.Background(), in.RecordRequest.PatientIdCardNumber)
+	patient, err := patientRepo.SelectByIdCardNumber(context.Background(), in.RecordRequest.PatientIdCardNumber)
+	if err != nil {
+		return &pb.StaffCreateRecordResponse{
+			ErrorCodeAndInfo: &pb.ErrorCodeAndInfo{
+				ErrorCode: 1,
+				Msg:       "无患者记录",
+			},
+		}, errors.New("ErrorNoPatientRecord")
+	}
 	recordUid := uuid.NewUid()
 	rwStaffUid, _ := marshal("", staffUid)
 	rOnlyStaffUid, _ := marshal("", "")
