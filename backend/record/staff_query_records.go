@@ -14,7 +14,7 @@ import (
 func (s *server) StaffQueryRecords(ctx context.Context, in *pb.StaffQueryRecordsRequest) (out *pb.StaffQueryRecordsResponse, err error) {
 
 	// TODO 验证令牌身份
-	staffUid, err := jwt.ParseToken(in.StaffToken)
+	staffUid, err := jwt.ParseToken(in.GetStaffToken())
 	if err != nil {
 		return &pb.StaffQueryRecordsResponse{
 			RecordResponses: nil,
@@ -34,7 +34,7 @@ func (s *server) StaffQueryRecords(ctx context.Context, in *pb.StaffQueryRecords
 	recordRepo := fabricQuery.NewRecordRepo()
 
 	// TODO 用患者身份证号查找患者记录
-	patient, err := patientRepo.SelectByIdCardNumber(context.Background(), in.PatientIdCardNumber)
+	patient, err := patientRepo.SelectByIdCardNumber(context.Background(), in.GetPatientIdCardNumber())
 	if err != nil {
 		return &pb.StaffQueryRecordsResponse{
 			RecordResponses: nil,
@@ -73,7 +73,7 @@ func (s *server) StaffQueryRecords(ctx context.Context, in *pb.StaffQueryRecords
 		}
 		record := &pb.RecordResponse{
 			RecordUid:           recordModel.Uid,
-			PatientIdCardNumber: in.PatientIdCardNumber,
+			PatientIdCardNumber: in.GetPatientIdCardNumber(),
 			PatientName:         patientName,
 			PhotoHash:           recordModel.PhotoHash,
 			DocumentHash:        recordModel.DocumentHash,

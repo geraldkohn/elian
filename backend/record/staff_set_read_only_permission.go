@@ -13,7 +13,7 @@ import (
 func (s *server) StaffSetReadOnlyPermission(ctx context.Context, in *pb.StaffSetReadOnlyPermissionRequest) (out *pb.StaffSetReadOnlyPermissionResponse, err error) {
 
 	// TODO 验证令牌身份
-	staffUid, err := jwt.ParseToken(in.StaffToken)
+	staffUid, err := jwt.ParseToken(in.GetStaffToken())
 	if err != nil {
 		return &pb.StaffSetReadOnlyPermissionResponse{
 			ErrorCodeAndInfo: &pb.ErrorCodeAndInfo{
@@ -27,7 +27,7 @@ func (s *server) StaffSetReadOnlyPermission(ctx context.Context, in *pb.StaffSet
 	// TODO 查找对应的医生信息
 	staffRepo := query.NewStaffRepo()
 	var staffUids []string
-	for _, req := range in.PermissionRequests {
+	for _, req := range in.GetPermissionRequests() {
 		staff, err := staffRepo.SelectByHospitalAndDepartmentAndName(context.Background(), req.Hospital, req.Department, req.Name)
 		if err != nil {
 			_ = staff
@@ -37,7 +37,7 @@ func (s *server) StaffSetReadOnlyPermission(ctx context.Context, in *pb.StaffSet
 	}
 
 	// TODO 在病历记录中添加医生权限(只读)
-	err = addROnlyPermission(staffUids, in.RecordUid)
+	err = addROnlyPermission(staffUids, in.GetRecordUid())
 	if err != nil {
 		return &pb.StaffSetReadOnlyPermissionResponse{
 			ErrorCodeAndInfo: &pb.ErrorCodeAndInfo{

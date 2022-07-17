@@ -31,7 +31,7 @@ func (s *server) StaffCreateRecord(ctx context.Context, in *pb.StaffCreateRecord
 
 	// TODO 根据患者身份证号查询患者uid, 格式化可读可写的医生的uid
 	patientRepo := query.NewPatientRepo()
-	patient, err := patientRepo.SelectByIdCardNumber(context.Background(), in.RecordRequest.PatientIdCardNumber)
+	patient, err := patientRepo.SelectByIdCardNumber(context.Background(),  in.GetRecordRequest().GetPatientIdCardNumber())
 	if err != nil {
 		return &pb.StaffCreateRecordResponse{
 			ErrorCodeAndInfo: &pb.ErrorCodeAndInfo{
@@ -68,9 +68,9 @@ func (s *server) StaffCreateRecord(ctx context.Context, in *pb.StaffCreateRecord
 		PatientUid:       patient.Uid,
 		WriteStaffUid:    rwStaffUid,
 		ReadOnlyStaffUid: rOnlyStaffUid,
-		PhotoHash:        in.RecordRequest.PhotoHash,
-		DocumentHash:     in.RecordRequest.DocumentHash,
-		Description:      in.RecordRequest.Description,
+		PhotoHash:        in.GetRecordRequest().GetPhotoHash(),
+		DocumentHash:     in.GetRecordRequest().GetDocumentHash(),
+		Description:      in.GetRecordRequest().GetDescription(),
 		LastChangeTime:   jwt.FormatTime(time.Now()),
 	})
 	if err != nil {

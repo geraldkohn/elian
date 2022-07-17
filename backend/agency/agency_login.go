@@ -13,7 +13,7 @@ import (
 )
 
 func (s *server) AgencyLogin(ctx context.Context, in *pb.AgencyLoginRequest) (out *pb.AgencyLoginResponse, err error) {
-	uid, err := jwt.ParseToken(in.Token)
+	uid, err := jwt.ParseToken(in.GetToken())
 
 	//token失效, 验证license
 	if err != nil {
@@ -24,11 +24,11 @@ func (s *server) AgencyLogin(ctx context.Context, in *pb.AgencyLoginRequest) (ou
 		}
 
 		for _, license := range licenses {
-			if in.License == license.LicenseCode {
+			if in.GetLicense() == license.LicenseCode {
 				agencyRepo := query.NewAgencyRepo()
-				a, err := agencyRepo.SelectByLicense(context.Background(), in.License)
+				a, err := agencyRepo.SelectByLicense(context.Background(), in.GetLicense())
 				if err != nil {
-					return &pb.AgencyLoginResponse{ErrorCode: 1, Token: "", Msg: "机构不存在"}, errors.New("未注册的机构试图登录, license: " + in.License)
+					return &pb.AgencyLoginResponse{ErrorCode: 1, Token: "", Msg: "机构不存在"}, errors.New("未注册的机构试图登录, license: " + in.GetLicense())
 				}
 
 				newToken, _ := jwt.SignedToken(a.Uid)
@@ -37,7 +37,7 @@ func (s *server) AgencyLogin(ctx context.Context, in *pb.AgencyLoginRequest) (ou
 			}
 		}
 
-		return &pb.AgencyLoginResponse{ErrorCode: 1, Token: "", Msg: "许可证不正确"}, errors.New("无许可证机构试图登录, license: " + in.License)
+		return &pb.AgencyLoginResponse{ErrorCode: 1, Token: "", Msg: "许可证不正确"}, errors.New("无许可证机构试图登录, license: " + in.GetLicense())
 	}
 
 	agencyRepo := query.NewAgencyRepo()

@@ -13,7 +13,7 @@ import (
 func (s *server) AgencySetReadAndWritePermission(ctx context.Context, in *pb.AgencySetReadAndWritePermissionRequest) (out *pb.AgencySetReadAndWritePermissionResponse, err error) {
 
 	// TODO 验证令牌身份
-	agencyUid, err := jwt.ParseToken(in.AgencyToken)
+	agencyUid, err := jwt.ParseToken(in.GetAgencyToken())
 	if err != nil {
 		return &pb.AgencySetReadAndWritePermissionResponse{
 			ErrorCodeAndInfo: &pb.ErrorCodeAndInfo{
@@ -27,7 +27,7 @@ func (s *server) AgencySetReadAndWritePermission(ctx context.Context, in *pb.Age
 	// TODO 查找对应的医生信息
 	staffRepo := query.NewStaffRepo()
 	var staffUids []string
-	for _, req := range in.PermissionRequests {
+	for _, req := range in.GetPermissionRequests() {
 		staff, err := staffRepo.SelectByHospitalAndDepartmentAndName(context.Background(), req.Hospital, req.Department, req.Name)
 		if err != nil {
 			_ = staff
@@ -37,7 +37,7 @@ func (s *server) AgencySetReadAndWritePermission(ctx context.Context, in *pb.Age
 	}
 
 	// TODO 在病历记录中添加医生权限(读写)
-	err = addRWPermission(staffUids, in.RecordUid)
+	err = addRWPermission(staffUids, in.GetRecordUid())
 	if err != nil {
 		return &pb.AgencySetReadAndWritePermissionResponse{
 			ErrorCodeAndInfo: &pb.ErrorCodeAndInfo{

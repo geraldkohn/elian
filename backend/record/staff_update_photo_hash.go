@@ -13,7 +13,7 @@ import (
 func (s *server) StaffUpdatePhotoHash(ctx context.Context, in *pb.StaffUpdatePhotoHashRequest) (out *pb.StaffUpdatePhotoHashResponse, err error) {
 
 	// TODO 验证令牌身份
-	staffUid, err := jwt.ParseToken(in.StaffToken)
+	staffUid, err := jwt.ParseToken(in.GetStaffToken())
 	if err != nil {
 		return &pb.StaffUpdatePhotoHashResponse{
 			ErrorCodeAndInfo: &pb.ErrorCodeAndInfo{
@@ -25,7 +25,7 @@ func (s *server) StaffUpdatePhotoHash(ctx context.Context, in *pb.StaffUpdatePho
 	log.Print("医生uid" + staffUid + "更新病历图片")
 
 	// TODO 判断是否有写权限
-	ok := judgeStaffRWPermission(staffUid, in.RecordUid)
+	ok := judgeStaffRWPermission(staffUid, in.GetRecordUid())
 	if !ok {
 		return &pb.StaffUpdatePhotoHashResponse{
 			ErrorCodeAndInfo: &pb.ErrorCodeAndInfo{
@@ -36,7 +36,7 @@ func (s *server) StaffUpdatePhotoHash(ctx context.Context, in *pb.StaffUpdatePho
 	}
 
 	recordRepo := fabricQuery.NewRecordRepo()
-	err = recordRepo.UpdatePhotoHashByUid(context.Background(), in.RecordUid, in.PhotoHash)
+	err = recordRepo.UpdatePhotoHashByUid(context.Background(), in.GetRecordUid(), in.GetPhotoHash())
 	if err != nil {
 		return &pb.StaffUpdatePhotoHashResponse{
 			ErrorCodeAndInfo: &pb.ErrorCodeAndInfo{

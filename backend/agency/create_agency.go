@@ -23,7 +23,7 @@ func (s *server) CreateAgency(ctx context.Context, in *pb.CreateAgencyRequest) (
 	}
 
 	for _, license := range licenses {
-		if in.License == license.LicenseCode {
+		if in.GetLicense() == license.LicenseCode {
 			agencyRepo := query.NewAgencyRepo()
 			uid := uid.NewUid()
 			token, err := jwt.SignedToken(uid)
@@ -35,7 +35,7 @@ func (s *server) CreateAgency(ctx context.Context, in *pb.CreateAgencyRequest) (
 
 			agency := &model.Agency{
 				Uid:           uid,
-				License:       in.License,
+				License:       in.GetLicense(),
 				RegisterTime:  jwt.FormatTime(now),
 				LastLoginTime: jwt.FormatTime(now),
 				Token:         token,
@@ -50,5 +50,5 @@ func (s *server) CreateAgency(ctx context.Context, in *pb.CreateAgencyRequest) (
 			return &pb.CreateAgencyResponse{ErrorCode: 0, Token: "", Msg: "注册成功"}, nil
 		}
 	}
-	return &pb.CreateAgencyResponse{ErrorCode: 1, Token: "", Msg: "许可证不正确"}, errors.New("无许可证机构试图注册, license: " + in.License)
+	return &pb.CreateAgencyResponse{ErrorCode: 1, Token: "", Msg: "许可证不正确"}, errors.New("无许可证机构试图注册, license: " + in.GetLicense())
 }

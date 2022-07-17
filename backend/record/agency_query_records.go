@@ -14,7 +14,7 @@ import (
 func (s *server) AgencyQueryRecords(ctx context.Context, in *pb.AgencyQueryRecordsRequest) (out *pb.AgencyQueryRecordsResponse, err error) {
 
 	// TODO 验证令牌身份
-	agencyUid, err := jwt.ParseToken(in.AgencyToken)
+	agencyUid, err := jwt.ParseToken(in.GetAgencyToken())
 	if err != nil {
 		return &pb.AgencyQueryRecordsResponse{
 			RecordResponses: nil,
@@ -34,7 +34,7 @@ func (s *server) AgencyQueryRecords(ctx context.Context, in *pb.AgencyQueryRecor
 	recordRepo := fabricQuery.NewRecordRepo()
 
 	// TODO 用患者身份证号查找患者记录
-	patient, err := patientRepo.SelectByIdCardNumber(context.Background(), in.PatientIdCardNumber)
+	patient, err := patientRepo.SelectByIdCardNumber(context.Background(), in.GetPatientIdCardNumber())
 	if err != nil {
 		return &pb.AgencyQueryRecordsResponse{
 			RecordResponses: nil,
@@ -67,7 +67,7 @@ func (s *server) AgencyQueryRecords(ctx context.Context, in *pb.AgencyQueryRecor
 		}
 		record := &pb.RecordResponse{
 			RecordUid:           recordModel.Uid,
-			PatientIdCardNumber: in.PatientIdCardNumber,
+			PatientIdCardNumber: in.GetPatientIdCardNumber(),
 			PatientName:         patientName,
 			PhotoHash:           recordModel.PhotoHash,
 			DocumentHash:        recordModel.DocumentHash,

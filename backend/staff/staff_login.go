@@ -11,16 +11,16 @@ import (
 )
 
 func (s *server) StaffLogin(ctx context.Context, in *pb.StaffLoginRequest) (out *pb.StaffLoginResponse, err error) {
-	uid, err := jwt.ParseToken(in.Token)
+	uid, err := jwt.ParseToken(in.GetToken())
 
 	//token失效
 	if err != nil {
 		staffRepo := query.NewStaffRepo()
-		p, err := staffRepo.SelectByIdCardNumber(context.Background(), in.IdCardNumber)
+		p, err := staffRepo.SelectByIdCardNumber(context.Background(), in.GetIdCardNumber())
 		if err != nil {
-			return &pb.StaffLoginResponse{ErrorCode: 1, Token: "", Msg: "用户不存在"}, errors.New("不存在的用户试图登录. " + "IdCardNumber: " + in.IdCardNumber)
+			return &pb.StaffLoginResponse{ErrorCode: 1, Token: "", Msg: "用户不存在"}, errors.New("不存在的用户试图登录. " + "IdCardNumber: " + in.GetIdCardNumber())
 		}
-		if p.Password == in.Password {
+		if p.Password == in.GetPassword() {
 			newToken, err := jwt.SignedToken(p.Uid)
 			if err != nil {
 				return &pb.StaffLoginResponse{ErrorCode: 1, Token: "", Msg: "请重新登录"}, errors.New("患者登录时生成token错误, 错误信息为: " + err.Error())

@@ -49,8 +49,8 @@ func staffRegisterHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		res.Msg = rpcRes.Msg
-		res.Token = rpcRes.Token
+		res.Msg = rpcRes.GetMsg()
+		res.Token = rpcRes.GetToken()
 		res.Status = 200
 		return
 	}

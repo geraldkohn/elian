@@ -13,7 +13,7 @@ import (
 func (s *server) StaffUpdateDescription(ctx context.Context, in *pb.StaffUpdateDescriptionRequest) (out *pb.StaffUpdateDescriptionResponse, err error) {
 
 	// TODO 验证令牌身份
-	staffUid, err := jwt.ParseToken(in.StaffToken)
+	staffUid, err := jwt.ParseToken(in.GetStaffToken())
 	if err != nil {
 		return &pb.StaffUpdateDescriptionResponse{
 			ErrorCodeAndInfo: &pb.ErrorCodeAndInfo{
@@ -25,7 +25,7 @@ func (s *server) StaffUpdateDescription(ctx context.Context, in *pb.StaffUpdateD
 	log.Print("医生uid" + staffUid + "更新病历简介")
 
 	// TODO 判断是否有写权限
-	ok := judgeStaffRWPermission(staffUid, in.RecordUid)
+	ok := judgeStaffRWPermission(staffUid, in.GetRecordUid())
 	if !ok {
 		return &pb.StaffUpdateDescriptionResponse{
 			ErrorCodeAndInfo: &pb.ErrorCodeAndInfo{
@@ -36,7 +36,7 @@ func (s *server) StaffUpdateDescription(ctx context.Context, in *pb.StaffUpdateD
 	}
 
 	recordRepo := fabricQuery.NewRecordRepo()
-	err = recordRepo.UpdateDescriptionByUid(context.Background(), in.RecordUid, in.Description)
+	err = recordRepo.UpdateDescriptionByUid(context.Background(), in.GetRecordUid(), in.GetDescription())
 	if err != nil {
 		return &pb.StaffUpdateDescriptionResponse{
 			ErrorCodeAndInfo: &pb.ErrorCodeAndInfo{

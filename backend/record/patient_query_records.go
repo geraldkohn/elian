@@ -13,7 +13,7 @@ import (
 
 func (s *server) PatientQueryRecords(ctx context.Context, in *pb.PatientQueryRecordsRequest) (out *pb.PatientQueryRecordsResponse, err error) {
 
-	patientUid, err := jwt.ParseToken(in.PatientToken)
+	patientUid, err := jwt.ParseToken(in.GetPatientToken())
 
 	// TODO 令牌认证失败, 需要重新登录.
 	if err != nil {

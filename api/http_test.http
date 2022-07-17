@@ -1,0 +1,91 @@
+# 患者注册
+POST /api/patient/register HTTP/1.1
+Host: 192.168.100.26:12345
+User-Agent: apifox/1.0.0 (https://www.apifox.cn)
+Content-Type: application/json
+Content-Length: 76
+
+{
+    "name": "患者1",
+    "password": "patient_password",
+    "id_card_number": "patient_id_1"
+}
+
+###
+POST /api/patient/register HTTP/1.1
+Host: 192.168.100.26:12345
+User-Agent: apifox/1.0.0 (https://www.apifox.cn)
+Content-Type: application/json
+Content-Length: 76
+
+{
+    "name": "患者2",
+    "password": "patient_password",
+    "id_card_number": "patient_id_2"
+}
+
+###
+#医生注册
+POST /api/staff/register HTTP/1.1
+Host: 192.168.100.26:12345
+User-Agent: apifox/1.0.0 (https://www.apifox.cn)
+Content-Type: application/json
+Content-Length: 186
+
+{
+    "name": "医生1",
+    "password": "staff_password",
+    "hospital": "hospital1",
+    "department": "department1",
+    "id_card_number": "staff_id_2",
+    "job_number": "1"
+}
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXkiOiIxNyIsImhvdXIiOiI2IiwibW9udGgiOiI3IiwidWlkIjoiZDk3M2E4YTYtMmFhMC00YWIzLWE0ODMtZDE5MzJjMjA5MzdlIiwieWVhciI6IjIwMjIifQ.L7tK_jnKSZq6ezQLTq3gD8E4NndhGr3Swo9CTguCyuw
+
+###
+
+#医生创建病历
+POST /api/record/staff HTTP/1.1
+Host: 192.168.100.26:12345
+Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXkiOiIxNyIsImhvdXIiOiI2IiwibW9udGgiOiI3IiwidWlkIjoiZDk3M2E4YTYtMmFhMC00YWIzLWE0ODMtZDE5MzJjMjA5MzdlIiwieWVhciI6IjIwMjIifQ.L7tK_jnKSZq6ezQLTq3gD8E4NndhGr3Swo9CTguCyuw"
+User-Agent: apifox/1.0.0 (https://www.apifox.cn)
+Content-Type: application/json
+Content-Length: 230
+
+{
+    "patientIdCardNumber": "patient_id_1",
+    "photoHash": "url",
+    "documentHash": "url",
+    "description": "描述"
+}
+
+###
+
+POST /api/record/staff HTTP/1.1
+Host: 192.168.100.26:12345
+Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXkiOiIxNyIsImhvdXIiOiI2IiwibW9udGgiOiI3IiwidWlkIjoiZDk3M2E4YTYtMmFhMC00YWIzLWE0ODMtZDE5MzJjMjA5MzdlIiwieWVhciI6IjIwMjIifQ.L7tK_jnKSZq6ezQLTq3gD8E4NndhGr3Swo9CTguCyuw"
+User-Agent: apifox/1.0.0 (https://www.apifox.cn)
+Content-Type: application/json
+Content-Length: 230
+
+{
+    "patientIdCardNumber": "patient_id_1",
+    "photoHash": "url",
+    "documentHash": "url",
+    "description": "描述"
+}
+
+###
+
+#医生查询病历记录
+GET /api/record/staff HTTP/1.1
+Host: 192.168.100.26:12345
+Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXkiOiIxNyIsImhvdXIiOiI2IiwibW9udGgiOiI3IiwidWlkIjoiZDk3M2E4YTYtMmFhMC00YWIzLWE0ODMtZDE5MzJjMjA5MzdlIiwieWVhciI6IjIwMjIifQ.L7tK_jnKSZq6ezQLTq3gD8E4NndhGr3Swo9CTguCyuw"
+User-Agent: apifox/1.0.0 (https://www.apifox.cn)
+Content-Type: application/json
+Content-Length: 35
+
+{
+    "patientIdCardNumber": "patient_id_1"
+}

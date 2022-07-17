@@ -30,11 +30,11 @@ func (s *server) CreateStaff(ctx context.Context, in *pb.CreateStaffRequset) (ou
 
 	staff := &model.Staff{
 		Uid:           uid,
-		Name:          in.Name,
-		Hospital:      in.Hospital,
-		Department:    in.Department,
-		JobNumber:     in.JobNumber,
-		IdCardNumber:  in.IdCardNumber,
+		Name:          in.GetName(),
+		Hospital:      in.GetHospital(),
+		Department:    in.GetDepartment(),
+		JobNumber:     in.GetJobNumber(),
+		IdCardNumber:  in.GetIdCardNumber(),
 		RegisterTime:  jwt.FormatTime(now),
 		LastLoginTime: jwt.FormatTime(now),
 		Token:         token,
