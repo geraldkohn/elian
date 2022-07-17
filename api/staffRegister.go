@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
-	"time"
 
 	pb "github.com/geraldkohn/elian/proto/staff"
 	"google.golang.org/grpc/grpclog"
@@ -31,8 +30,7 @@ func staffRegisterHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		c := pb.NewStaffServiceClient(connStaff)
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
+		ctx := context.Background()
 
 		rpcReq := &pb.CreateStaffRequset{
 			Name:         req.Name,
